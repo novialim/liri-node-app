@@ -22,16 +22,51 @@ Inside of the folder in which you've cloned the files to, run the following comm
 npm install
 ```
 
-## Running the application
+## Running the application 
 
-Grab tweets from Twitter: `node liri my-tweets`
+```
+node liri.js
+```
 
-Search a song on Spotify: `node liri spotify-this-song [song]`
+**What Each Command SHould Do**
 
-Get information about a movie: `node liri movie-this [movie]`
+```
+node liri.js my-tweets
+```
+* This will show your last 20 tweets and when they were created at in your terminal/bash window.
 
-Run any commands you have run in the past: `node liri do-what-it-says`
+```
+node liri.js spotify-this-song '<song name here>'
+```
+* This will show the following information about the song in your terminal/bash window
 
+```
+* Artist(s)
+* The song's name
+* A preview link of the song from Spotify
+* The album that the song is from
+```
+
+```
+node liri.js movie-this '<movie name here>'
+```
+* This will output the following information to your terminal/bash window:
+
+```
+   * Title of the movie.
+   * Year the movie came out.
+   * IMDB Rating of the movie.
+   * Country where the movie was produced.
+   * Language of the movie.
+   * Plot of the movie.
+   * Actors in the movie.
+   * Website URL.
+```
+
+```
+node liri.js do-what-it-says
+```
+* Using the fs Node package, LIRI will take the text inside of random.txt and then use it to call one of LIRI's commands.
 
 All commands are logged to `log.txt` file.
 
