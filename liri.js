@@ -5,6 +5,7 @@
 	var Spotify = require('node-spotify-api');
 	var request = require('request');
 	var fs = require('fs');
+	var moment = require('moment');
  
 	// Assigning keys to variable client
 	var client = new Twitter(keys.twitterKeys);
@@ -67,22 +68,19 @@
 			      console.log(tweets[i].created_at);
 			      console.log(' ');
 
-			      // var log = tweets[i].text+'\r\n'+tweets[i].created_at+'\r\n'+'\r\n';
-			      // fs.appendFile("./log.txt", log, function(err) {
-			      //   if(err) {
-			      //   return console.log(err);
-			      //   }
-			      // });
 			    }
 			}
 			else if (error){
 				console.log(error);
-			}		     
+			}	
+
+			appendFile(action,input,response.statusCode);
 		});
 	}
 
 
 	function spotifyThis(){
+		var statusCode;
 		if(input==undefined){
 			//* If no song is provided then your program will default to "The Sign" by Ace of Base.
 			input = "The Sign Ace of Base";
@@ -94,6 +92,7 @@
 			  }
 
 			  else{
+			  		statusCode = '200';
 			 	   	var trackData = data.tracks.items;
 				    trackData.forEach(function(song) {
 				      console.log('Artist: ' + song.artists[0].name);
@@ -104,15 +103,19 @@
 				      console.log('\r\n');
 				    });
 			   }
+
+			   appendFile(action,input,statusCode);			   
 			});
 		
 	}
 	
 	function movieThis(){
-		if(input==undefined){
+		if(input==undefined || input==""){
 			// * If the user doesn't type a movie in, the program will output data for the movie 'Mr. Nobody.'
 			input = "Mr. Nobody.";
      		console.log('If you haven\'t watched "Mr. Nobody." then you should: <http://www.imdb.com/title/tt0485947/>\nIt\'s on Netflix!');    
+
+     		appendFile(action,input,"200");
 		}		
 		else{
 
@@ -132,12 +135,12 @@
 				console.log("* Language of the movie: "+movies.Language);
 				console.log("* Plot of the movie: "+movies.Plot);
 				console.log("* Actors in the movie: "+movies.Actors);
-				if(movies.tomatoURL!==undefined)
-					console.log("* Rotten Tomatoes URL: "+movies.tomatoURL);
+				console.log("* Movie Website: "+movies.Website);
 		
 			    console.log('\r\n');
-				    
 			   }
+
+			   appendFile(action,input,response.statusCode);
 			});
 		}
 	}
@@ -153,24 +156,32 @@
 			var array = ranAction.split(",");
 
 			action = array[0].trim();
-			input = array[1].trim();
+			if(input){
+				input = array[1].replace(/['"]+/g, '').trim();
+			}
 
-			console.log("Do What It Says Content: "+action);
+			console.log("<----------Do What It Says Action: "+action+"---------->\r\n");
 
-			init(action, input);			
+			init(action, input);		
 
 		});
 	}
 
-	function appendFile(){
-		fs.appendFile("log.txt", ", "+amt, function(err,data){
+	function appendFile(action,input,status){
+
+		if(input==undefined){
+			input = "";
+			var loggedCmd = "["+(moment().format('LLLL')+"] \"Action: "+action+"\" \"Status:"+status+"\"");
+		}
+		else{
+			var loggedCmd = "["+(moment().format('LLLL')+"] \"Action: "+action+"\" \"Input: "+input+"\" \"Status:"+status+"\"");
+		}
+		// console.log(loggedCmd);
+
+		fs.appendFile("log.txt", loggedCmd+"\r\n", 'utf8', function(err,data){
 			if(err) return console.log(err);
 			else{
-				
-				console.log("Log Saved!");
-
-				// Do we need to log the output data or commands only?
-
+				console.log("<----------Log Saved!---------->");
 			}
 		});
 	}

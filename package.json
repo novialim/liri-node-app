@@ -17,6 +17,7 @@
   },
   "homepage": "https://github.com/novialim/liri-node-app#readme",
   "dependencies": {
+    "moment": "^2.18.1",
     "node-spotify-api": "^1.0.5",
     "request": "^2.81.0",
     "twitter": "^1.7.1"
