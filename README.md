@@ -28,7 +28,7 @@ npm install
 node liri.js
 ```
 
-**What Each Command SHould Do**
+**What Each Command Should Do**
 
 ```
 node liri.js my-tweets
